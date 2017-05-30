@@ -1,10 +1,15 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS, cross_origin
 import datetime
 import json
 import requests
 import sqlite3
 
+def list_to_dict(list):
+    return {'name': list[0], 'updated': list[1], 'url': list[2]}
+
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/')
 def default():
@@ -46,8 +51,11 @@ def list_notes():
     cur = conn.cursor()
     cur.execute("SELECT name, datetime(updated) AS updated, url FROM subjects")
     subject_list = cur.fetchall()
+    result_list = []
+    for entry in subject_list:
+        result_list.append(list_to_dict(entry))
     conn.close()
-    return jsonify(subject_list)
+    return jsonify(result_list)
 
 
 if __name__ == "__main__":
