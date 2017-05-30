@@ -34,9 +34,10 @@ def update_note():
     conn = sqlite3.connect(db_file)
     cur = conn.cursor()
 
-    cur.execute("SELECT name FROM subjects WHERE name = ?", (name,))
-    if cur.rowcount == 1:
-        cur.execute("UPDATE subjects SET updated = datetime(?), url = ?", (updated, url,))
+    rowcount = cur.execute("SELECT count(name) FROM subjects WHERE name = ?", (name,)).fetchone()[0]
+
+    if rowcount == 1:
+        cur.execute("UPDATE subjects SET updated = datetime(?), url = ? WHERE name = ?", (updated, url, name,))
     else:
         cur.execute("INSERT INTO subjects VALUES(?, ?, ?)", (name, updated, url,))
     conn.commit()
