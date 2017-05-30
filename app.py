@@ -51,4 +51,4 @@ def list_notes():
 
 
 if __name__ == "__main__":
-    app.run(debug=False, use_reloader=True, host='152.66.177.17')
+    app.run(debug=False, use_reloader=True, host='0.0.0.0')
